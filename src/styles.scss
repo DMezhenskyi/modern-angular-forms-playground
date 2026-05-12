@@ -1,0 +1,238 @@
+// Reset
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+// Brand tokens
+:root {
+  --color-primary: #121314;
+  --color-surface: #191a1b;
+  --color-accent: #FFDF5A;
+  --color-text: #F9F7DA;
+  --color-success: #4caf50;
+  --color-error: #ff5722;
+  --color-info: #449eff;
+  --border-radius: 5px;
+  --spacing-step: 8px;
+
+  --header-height: 64px;
+}
+
+/* You can add global styles to this file, and also import other style files */
+
+body,
+html,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+span {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--color-primary);
+  color: var(--color-text);
+}
+
+df-root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100vh;
+}
+
+#content {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: calc(var(--spacing-step) * 3) calc(var(--spacing-step) * 3) 0 calc(var(--spacing-step) * 3);
+  box-sizing: border-box;
+  background-color: var(--color-surface);
+  margin: 0 calc(var(--spacing-step) * 2) calc(var(--spacing-step) * 2);
+  width: calc(100% - calc(var(--spacing-step) * 4));
+  height: calc(100vh - var(--header-height) - calc(var(--spacing-step) * 2));
+  border-radius: calc(var(--border-radius) * 2);
+}
+
+@mixin control-message() {
+  font-size: 0.6rem;
+  animation-name: input-message-animation;
+  animation-duration: 300ms;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-step);
+
+
+  fieldset {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--border-radius);
+    padding: calc(var(--spacing-step) * 2);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-step);
+
+    legend {
+      padding: 0 calc(var(--spacing-step) * 1);
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .form-field-group {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-step);
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing-step) * 0.3);
+    min-height: calc(var(--spacing-step) * 9);
+
+    &--inline {
+      flex-direction: row;
+      align-items: center;
+      gap: calc(var(--spacing-step));
+    }
+
+    &--auto-height {
+      min-height: auto;
+    }
+
+    &--reversed {
+      flex-direction: row-reverse;
+      justify-content: start;
+    }
+
+    label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      opacity: 0.9;
+    }
+
+    input[type='text'],
+    input[type='number'],
+    select,
+    input[type='email'] {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--border-radius);
+      color: var(--color-text);
+      font-size: 0.9rem;
+      padding: calc(var(--spacing-step) * 1) calc(var(--spacing-step) * 1.5);
+      transition: border-color 0.15s;
+      width: 100%;
+
+      &:focus {
+        border-color: var(--color-accent);
+        outline: none;
+      }
+    }
+
+    input[type='checkbox'] {
+      width: 16px;
+      height: 16px;
+      background: var(--color-text);
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      accent-color: var(--color-accent);
+    }
+
+    .form-control.invalid {
+      border: 1px solid var(--color-error)
+    }
+  }
+}
+
+.error {
+  color: var(--color-error);
+  @include control-message();
+}
+
+.hint {
+  color: var(--color-info);
+  @include control-message();
+}
+
+a {
+  display: inline-block;
+  text-decoration: none;
+
+  &:focus-visible {
+    outline: 1px dashed var(--color-accent);
+    outline-offset: 1px;
+  }
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  background: var(--color-accent);
+  border: none;
+  border-radius: var(--border-radius);
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: calc(var(--spacing-step) * 1.25) calc(var(--spacing-step) * 3);
+  transition: opacity 0.25s, transform 0.25s;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+  }
+
+  &:hover:not(:disabled) {
+    transform: scale(1.01, 1.01);
+  }
+}
+
+@keyframes input-message-animation {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+.errors-banner {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-step) * 0.5);
+  padding: calc(var(--spacing-step) * 1.5) calc(var(--spacing-step) * 2);
+  box-sizing: border-box;
+  border-radius: var(--border-radius);
+  background-color: rgba(255, 87, 34, 0.1);
+  border: 1px solid var(--color-error);
+}

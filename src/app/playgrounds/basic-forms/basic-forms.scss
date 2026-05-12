@@ -1,0 +1,15 @@
+:host {
+  display: block;
+  color: var(--color-text);
+  padding: calc(var(--spacing-step) * 2);
+  background-color: var(--color-primary);
+  border-radius: var(--border-radius);
+}
+
+h1 {
+  margin-bottom: calc(var(--spacing-step) * 1.5);
+}
+
+.checkout-form {
+  min-width: 390px;
+}

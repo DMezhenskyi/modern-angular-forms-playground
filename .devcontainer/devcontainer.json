@@ -1,0 +1,14 @@
+{
+  "name": "Modern Angular Forms Playground",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:24-trixie",
+  "postCreateCommand": "pnpm install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "angular.ng-template",
+        "esbenp.prettier-vscode",
+        "eamodio.gitlens"
+      ]
+    }
+  }
+}
