@@ -8,7 +8,7 @@
       <span class="error">{{error.message}}</span>
     }
   </div>
-  
+
   <div class="form-field">
     <label for="email">Email</label>
     <input [formField]="form.email" id="email" type="email" class="form-control" />
@@ -21,10 +21,18 @@
   and bind it with the model
   HINT: make sure the type of the input is "number".
   HINT: use layout of existing fiels `<div class="form-field"></div>` -->
-  
-  <!-- TASK 5: display possible validation errors for the itemsCount field 
-  HINT: use layout of existing error messages
-  -->
+  <div class="form-field">
+    <label for="itemCount">Item Count</label>
+    <input [formField]="form.itemCount" id="itemCount" type="number" class="form-control" />
+    
+    <!-- TASK 5: display possible validation errors for the itemsCount field 
+    HINT: use layout of existing error messages
+    -->
+    @for (error of form.itemCount().errors(); track error.kind) {
+      <span class="error">{{error.message}}</span>
+    }
+  </div>
+
 
   <section class="actions">
     <button type="submit">Submit</button>
