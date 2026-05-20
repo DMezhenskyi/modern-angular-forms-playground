@@ -4,15 +4,9 @@ import { User } from '../core/order/model';
 import { disallowedValues } from '../core/validators';
 
 export const userFormInfoSchema = schema<User>((path) => {
-  // TASK 2: apply disallowedValues(['admin', ...]) validator to fullName control
-  //         Make sure it works
   disallowedValues(path.fullName, ['admin', 'test'], {
     when: (ctx) => ctx.state.required(),
   });
-
-  // TASK 4: apply disallowedValues conditionally e.g only when fullName is required.
-  //         Example: disallowedValues(['admin', ...], when: ({state}) => state.required())
-
   required(path.fullName, { message: `This field is required` });
   minLength(path.fullName, 5, {
     message: ({ state }) => `The minimum length is ${state.minLength?.()} characters`,

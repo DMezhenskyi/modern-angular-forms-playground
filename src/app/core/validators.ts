@@ -32,13 +32,6 @@ export function disallowedValues(
   },
 ) {
   validate(path, (ctx) => {
-    // TASK 1: implement a validator logic which prevents usage of certain words e.g 'test', 'admin', 'dummy', etc
-    //         If user enters a string listed in the `disallowedValues` array, validator should return an error
-    //         that this word isn't allowed. The validator should support optional custom message.
-    //         The validator should support `when` condition,
-    //         Usage example: disallowedValues(['admin', 'dummy'])
-
-    // TASK 3: Implement support of `when` condition, likewise required(p, {when: (ctx) => ...})
     const APPLY_VALIDATION = config?.when ? config.when(ctx) : true;
     if (!APPLY_VALIDATION) return;
 
