@@ -1,20 +1,23 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { email, form, FormField, FormRoot, max, maxLength, min, minLength, pattern, required, submit } from '@angular/forms/signals';
+import { form, FormField, FormRoot, max, maxLength, min, minLength, pattern, required, apply } from '@angular/forms/signals';
 
 import { Order } from '../../core/order/model';
 import { OrderHandler } from '../../core/order/order-handler';
+import { userFormInfoSchema, UserInfoForm } from '../../shared-ui/user-form';
 
 @Component({
   selector: 'df-basic-forms',
   styleUrls: ['./basic-forms.scss'],
   templateUrl: './basic-forms.html',
-  imports: [FormField, FormRoot],
+  imports: [FormField, FormRoot, UserInfoForm],
 })
 export default class BasicForms {
   readonly #orderHandler = inject(OrderHandler);
   readonly #orderModel = signal<Order>({
-    fullName: '',
-    email: '',
+    user: {
+      fullName: '',
+      email: '',
+    },
     itemCount: null,
     companyName: '',
     country: '',
@@ -23,11 +26,8 @@ export default class BasicForms {
   protected readonly form = form(
     this.#orderModel,
     (path) => {
-      required(path.fullName, { message: `This field is required` });
-      minLength(path.fullName, 5, {
-        message: ({ state }) => `The minimum length is ${state.minLength?.()} characters`
-      });
-      email(path.email, { message: `The provided email isn't valid` });
+      apply(path.user, userFormInfoSchema);
+      
       required(path.itemCount, { message: `This field is required` });
       min(path.itemCount, 1, { message: `Amount is too small` });
       max(path.itemCount, 30, { message: `Amount is too large` });
