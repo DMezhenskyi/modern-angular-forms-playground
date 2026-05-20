@@ -1,5 +1,16 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { form, FormField, FormRoot, max, maxLength, min, minLength, pattern, required, apply } from '@angular/forms/signals';
+import {
+  form,
+  FormField,
+  FormRoot,
+  max,
+  maxLength,
+  min,
+  minLength,
+  pattern,
+  required,
+  apply,
+} from '@angular/forms/signals';
 
 import { Order } from '../../core/order/model';
 import { OrderHandler } from '../../core/order/order-handler';
@@ -13,6 +24,8 @@ import { userFormInfoSchema, UserInfoForm } from '../../shared-ui/user-form';
 })
 export default class BasicForms {
   readonly #orderHandler = inject(OrderHandler);
+
+  // TASK 2: Reshape the model according to the new Order interface
   readonly #orderModel = signal<Order>({
     user: {
       fullName: '',
@@ -21,39 +34,38 @@ export default class BasicForms {
     itemCount: null,
     companyName: '',
     country: '',
-    taxID: ''
+    taxID: '',
   });
   protected readonly form = form(
     this.#orderModel,
     (path) => {
       apply(path.user, userFormInfoSchema);
-      
+
       required(path.itemCount, { message: `This field is required` });
       min(path.itemCount, 1, { message: `Amount is too small` });
       max(path.itemCount, 30, { message: `Amount is too large` });
 
+      // TASK 6: Extract company-related validations into a dedicated company scheme.
+      // NOTE: schema you can find here src/app/shared-ui/company-form.ts
       required(path.companyName);
       minLength(path.companyName, 5, {
-        message: ({ state }) => `The minimum length is ${state.minLength?.()} characters`
+        message: ({ state }) => `The minimum length is ${state.minLength?.()} characters`,
       });
-      maxLength(path.companyName, 255, {message: `The company name is too long`})
+      maxLength(path.companyName, 255, { message: `The company name is too long` });
 
-      pattern(path.taxID, /^[A-Z]{2}[A-Z0-9]{8,12}$/, {message: `Wrong TAX Id format`})
+      pattern(path.taxID, /^[A-Z]{2}[A-Z0-9]{8,12}$/, { message: `Wrong TAX Id format` });
     },
     {
       submission: {
-        action: async (form) => await this.#orderHandler.placeOrder(form().value())
-      }
-    }
+        action: async (form) => await this.#orderHandler.placeOrder(form().value()),
+      },
+    },
   );
 
-  protected readonly isSubmitting = computed(
-    () => this.form().submitting()
-  )
-  protected readonly buttonText = computed(
-    () => this.isSubmitting() ? `Submitting...` : `Submit`
-  )
+  protected readonly isSubmitting = computed(() => this.form().submitting());
+  protected readonly buttonText = computed(() =>
+    this.isSubmitting() ? `Submitting...` : `Submit`,
+  );
 
-  constructor() { }
-
+  constructor() {}
 }

@@ -9,3 +9,6 @@ export interface User {
   fullName: string;
   email: string;
 }
+
+// TASK 1: Restructure the Order interface and extract company-related data
+//         Into a `Company` interface.

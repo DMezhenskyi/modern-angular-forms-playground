@@ -8,6 +8,8 @@ export const companyInfoFormSchema = schema((path) => {
 @Component({
   selector: 'df-company-info-form',
   imports: [FormField],
-  template: ` <!-- NESTED FORM SHOULD BE HERE --> `
+  template: ` <!-- NESTED FORM SHOULD BE HERE --> `,
 })
-export class CompanyInfoForm {}
+export class CompanyInfoForm {
+  // TASK 4: Create a required input with a proper FieldTree type and update the component view bindings
+}
