@@ -27,7 +27,8 @@ export function disallowedValues(
   path: SchemaPath<string>,
   disallowedValues: string[],
   config?: {
-    message: string;
+    when?: LogicFn<string, boolean>;
+    message?: string;
   },
 ) {
   validate(path, (ctx) => {
@@ -36,6 +37,11 @@ export function disallowedValues(
     //         that this word isn't allowed. The validator should support optional custom message.
     //         The validator should support `when` condition,
     //         Usage example: disallowedValues(['admin', 'dummy'])
+
+    // TASK 3: Implement support of `when` condition, likewise required(p, {when: (ctx) => ...})
+    const APPLY_VALIDATION = config?.when ? config.when(ctx) : true;
+    if (!APPLY_VALIDATION) return;
+
     const disallowedValue = disallowedValues.find((v) => v === ctx.value());
 
     if (disallowedValue) {
@@ -45,6 +51,5 @@ export function disallowedValues(
       };
     }
     return;
-    // TASK 3: Implement support of `when` condition, likewise required(p, {when: (ctx) => ...})
   });
 }
