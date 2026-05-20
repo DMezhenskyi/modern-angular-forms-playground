@@ -1,16 +1,30 @@
 <h1>Simple Checkout</h1>
-<form class="checkout-form">
+<form novalidate class="checkout-form">
 
   <div class="form-field">
     <label for="name">Full Name</label>
     <input [formField]="form.fullName" id="name" placeholder="E.g Jane Doe" type="text" class="form-control" />
-    <!-- <span class="error">__FIELD_ERROR_MESSAGE__</span> -->
+    @for (error of form.fullName().errors(); track error.kind) {
+      <span class="error">{{error.message}}</span>
+    }
   </div>
-
+  
   <div class="form-field">
     <label for="email">Email</label>
     <input [formField]="form.email" id="email" type="email" class="form-control" />
+    @for (error of form.email().errors(); track error.kind) {
+      <span class="error">{{error.message}}</span>
+    }
   </div>
+
+  <!-- TASK 3: Create a native form control for itemsCount
+  and bind it with the model
+  HINT: make sure the type of the input is "number".
+  HINT: use layout of existing fiels `<div class="form-field"></div>` -->
+  
+  <!-- TASK 5: display possible validation errors for the itemsCount field 
+  HINT: use layout of existing error messages
+  -->
 
   <section class="actions">
     <button type="submit">Submit</button>
