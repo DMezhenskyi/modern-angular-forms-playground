@@ -43,10 +43,14 @@ export default class BasicForms {
     (path) => {
       apply(path.user, userFormInfoSchema);
 
+      // TASK 1: Make email a required field when this is a business purchase
+
       required(path.itemCount, { message: `This field is required` });
       min(path.itemCount, 1, { message: `Amount is too small` });
       max(path.itemCount, 30, { message: `Amount is too large` });
-      
+
+      // TASK 2: Hide the "Company Information" section when this is NOT a business purchase
+
       applyWhen(path.company, (ctx) => ctx.valueOf(path.businessPurchase), companyInfoFormSchema);
     },
     {
