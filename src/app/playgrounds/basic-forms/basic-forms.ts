@@ -42,7 +42,6 @@ export default class BasicForms {
     this.#orderModel,
     (path) => {
       apply(path.user, userFormInfoSchema);
-
       required(path.user.email, {
         when: (ctx) => ctx.valueOf(path.businessPurchase),
         message: `Email is required for business customers`,

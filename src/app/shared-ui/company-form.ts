@@ -9,8 +9,10 @@ import {
   pattern,
   required,
   schema,
+  validate,
 } from '@angular/forms/signals';
 import { Company } from '../core/order/model';
+import { VATCorrespondsCountry } from '../core/validators';
 
 export const companyInfoFormSchema = schema<Company>((path) => {
   required(path.name);
@@ -25,13 +27,14 @@ export const companyInfoFormSchema = schema<Company>((path) => {
   });
   hidden(path.taxID, {
     when: (ctx) => !['AT', 'DE', 'CH'].includes(ctx.valueOf(path.country)),
-  })
+  });
+  VATCorrespondsCountry(path.taxID, { country: (ctx) => ctx.valueOf(path.country) });
 });
 
 @Component({
   selector: 'df-company-info-form',
   imports: [FormField],
-  template: `  
+  template: `
     <fieldset>
       <legend>Company Information</legend>
       <div class="form-field">
@@ -63,18 +66,18 @@ export const companyInfoFormSchema = schema<Company>((path) => {
           <div class="form-field">
             <label for="tax-id">VAT ID</label>
             <input
-            [formField]="form().taxID"
-            placeholder="E.g DE123456789"
-            id="tax-id"
-            type="text"
-            class="form-control"
+              [formField]="form().taxID"
+              placeholder="E.g DE123456789"
+              id="tax-id"
+              type="text"
+              class="form-control"
             />
             @for (error of form().taxID().errors(); track error.kind) {
               <span class="error">{{ error.message }}</span>
             }
           </div>
         }
-        </div>
+      </div>
     </fieldset>
   `,
 })
