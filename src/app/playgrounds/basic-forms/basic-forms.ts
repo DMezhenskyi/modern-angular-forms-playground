@@ -32,17 +32,16 @@ export default class BasicForms {
     {
       submission: {
         action: async (form) => {
-          // TASK 1: Handle submition error and return it from the handler function
-          //         in order to bind it to the root FieldTree form state
-          // NOTE: `OrderHandler.placeOrderAndFail()` method returns error in a proper 
-          // format required by signal forms. 
-          return await this.#orderHandler.placeOrderAndFail(form().value())
-
           // TASK 3*: Handle submition error and map it with failed field
           // NOTE: To simulate this error use `OrderHandler.placeOrderAndFailEmail()` method
           //       this method returns extended ValidationError with a key of the field that is failed (email)
           //       your goal is to map this error to the email field
-          form().reset();
+          const {relatedField, ...error} = await this.#orderHandler.placeOrderAndFailEmail(form().value());
+          if (!error) form().reset();
+          return {
+            ...error,
+            fieldTree: relatedField === 'email' ? form.email : undefined
+          }
         }
       }
     }
