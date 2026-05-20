@@ -1,10 +1,12 @@
 import { Component, input } from '@angular/core';
 import { email, FieldTree, FormField, minLength, required, schema } from '@angular/forms/signals';
 import { User } from '../core/order/model';
+import { disallowedValues } from '../core/validators';
 
 export const userFormInfoSchema = schema<User>((path) => {
   // TASK 2: apply disallowedValues(['admin', ...]) validator to fullName control
   //         Make sure it works
+  disallowedValues(path.fullName, ['admin', 'test']);
 
   // TASK 4: apply disallowedValues conditionally e.g only when fullName is required.
   //         Example: disallowedValues(['admin', ...], when: ({state}) => state.required())

@@ -23,13 +23,28 @@ export function VATCorrespondsCountry(
   });
 }
 
-export function disallowedValues(path: SchemaPath<string>, disallowedValues: string[], config: {}) {
+export function disallowedValues(
+  path: SchemaPath<string>,
+  disallowedValues: string[],
+  config?: {
+    message: string;
+  },
+) {
   validate(path, (ctx) => {
     // TASK 1: implement a validator logic which prevents usage of certain words e.g 'test', 'admin', 'dummy', etc
     //         If user enters a string listed in the `disallowedValues` array, validator should return an error
     //         that this word isn't allowed. The validator should support optional custom message.
     //         The validator should support `when` condition,
     //         Usage example: disallowedValues(['admin', 'dummy'])
+    const disallowedValue = disallowedValues.find((v) => v === ctx.value());
+
+    if (disallowedValue) {
+      return {
+        kind: 'disallowed-username',
+        message: config?.message ?? `The value "${disallowedValue}" is not allowed.`,
+      };
+    }
+    return;
     // TASK 3: Implement support of `when` condition, likewise required(p, {when: (ctx) => ...})
   });
 }
