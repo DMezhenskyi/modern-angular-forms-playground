@@ -1,5 +1,14 @@
 <h1>Simple Checkout</h1>
-<form (submit)="submitForm($event)" novalidate class="checkout-form">
+<form [formRoot]="form" class="checkout-form">
+
+  <!-- 
+    TASK 2: display the errors-banner below if the server error happens
+            during the form submittion.
+    HINT: the error 'kind' value for the server error is `serverError`
+  -->
+  <!-- <div class="errors-banner">
+    <span class="error">__SERVER_ERROR_MESSAGE__</span>
+  </div> -->
 
   <div class="form-field">
     <label for="name">Full Name</label>

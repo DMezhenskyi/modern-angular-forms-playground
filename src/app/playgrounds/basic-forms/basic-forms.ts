@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { email, form, FormField, max, min, minLength, required, submit } from '@angular/forms/signals';
+import { email, form, FormField, FormRoot, max, min, minLength, required, submit } from '@angular/forms/signals';
 
 import { Order } from '../../core/order/model';
 import { OrderHandler } from '../../core/order/order-handler';
@@ -8,7 +8,7 @@ import { OrderHandler } from '../../core/order/order-handler';
   selector: 'df-basic-forms',
   styleUrls: ['./basic-forms.scss'],
   templateUrl: './basic-forms.html',
-  imports: [FormField],
+  imports: [FormField, FormRoot],
 })
 export default class BasicForms {
   readonly #orderHandler = inject(OrderHandler);
@@ -30,28 +30,31 @@ export default class BasicForms {
       max(path.itemCount, 30, { message: `Amount is too large` });
     },
     {
-      // form config
-    },
+      submission: {
+        action: async (form) => {
+          // TASK 1: Handle submition error and return it from the handler function
+          //         in order to bind it to the root FieldTree form state
+          // NOTE: `OrderHandler.placeOrderAndFail()` method returns error in a proper 
+          // format required by signal forms. 
+          await this.#orderHandler.placeOrderAndFail(form().value())
+
+          // TASK 3*: Handle submition error and map it with failed field
+          // NOTE: To simulate this error use `OrderHandler.placeOrderAndFailEmail()` method
+          //       this method returns extended ValidationError with a key of the field that is failed (email)
+          //       your goal is to map this error to the email field
+          form().reset();
+        }
+      }
+    }
   );
 
   protected readonly isSubmitting = computed(
-    () => false
+    () => this.form().submitting()
   )
   protected readonly buttonText = computed(
-    () => `Submit`
+    () => this.isSubmitting() ? `Submitting...` : `Submit`
   )
-
 
   constructor() { }
 
-  protected submitForm(e: Event) {
-    e.preventDefault();
-
-    // submit(
-    //   this.form,
-    //   async (form) => {
-    //     await this.#orderHandler.placeOrder(form().value())
-    //     form().reset();
-    //   }) 
-  }
 }
