@@ -15,12 +15,13 @@ import {
 import { Order } from '../../core/order/model';
 import { OrderHandler } from '../../core/order/order-handler';
 import { userFormInfoSchema, UserInfoForm } from '../../shared-ui/user-form';
+import { CompanyInfoForm, companyInfoFormSchema } from '../../shared-ui/company-form';
 
 @Component({
   selector: 'df-basic-forms',
   styleUrls: ['./basic-forms.scss'],
   templateUrl: './basic-forms.html',
-  imports: [FormField, FormRoot, UserInfoForm],
+  imports: [FormField, FormRoot, UserInfoForm, CompanyInfoForm],
 })
 export default class BasicForms {
   readonly #orderHandler = inject(OrderHandler);
@@ -31,10 +32,12 @@ export default class BasicForms {
       fullName: '',
       email: '',
     },
+    company: {
+      name: '',
+      country: '',
+      taxID: '',
+    },
     itemCount: null,
-    companyName: '',
-    country: '',
-    taxID: '',
   });
   protected readonly form = form(
     this.#orderModel,
@@ -47,13 +50,7 @@ export default class BasicForms {
 
       // TASK 6: Extract company-related validations into a dedicated company scheme.
       // NOTE: schema you can find here src/app/shared-ui/company-form.ts
-      required(path.companyName);
-      minLength(path.companyName, 5, {
-        message: ({ state }) => `The minimum length is ${state.minLength?.()} characters`,
-      });
-      maxLength(path.companyName, 255, { message: `The company name is too long` });
-
-      pattern(path.taxID, /^[A-Z]{2}[A-Z0-9]{8,12}$/, { message: `Wrong TAX Id format` });
+      apply(path.company, companyInfoFormSchema);
     },
     {
       submission: {

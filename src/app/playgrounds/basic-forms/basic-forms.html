@@ -1,6 +1,7 @@
 <h1>Simple Checkout</h1>
 <form [formRoot]="form" class="checkout-form">
   <df-user-info-form [form]="form.user" />
+
   <div class="form-field">
     <label for="itemCount">Item Count</label>
     <input [formField]="form.itemCount" id="itemCount" type="number" class="form-control" />
@@ -17,49 +18,7 @@
     // TASK 5: Import the company-form component into the current one
     //         declare it instead of <fieldset ...> below
   -->
-
-  <fieldset>
-    <legend>Company Information</legend>
-    <div class="form-field">
-      <label for="company-name">Company Name</label>
-      <input
-        [formField]="form.companyName"
-        id="company-name"
-        placeholder="E.g MyCompany GmbH"
-        type="text"
-        class="form-control"
-      />
-      @for (error of form.companyName().errors(); track error.kind) {
-        <span class="error">{{ error.message }}</span>
-      }
-    </div>
-    <div class="form-field-group">
-      <div class="form-field">
-        <label for="country">Country</label>
-        <select [formField]="form.country" id="country" class="form-control">
-          <option value="">Select country</option>
-          <option value="DE">Germany</option>
-          <option value="AT">Austria</option>
-          <option value="CH">Switzerland</option>
-          <option value="CA">Canada</option>
-          <option value="OTHER">Other</option>
-        </select>
-      </div>
-      <div class="form-field">
-        <label for="tax-id">TAX ID</label>
-        <input
-          [formField]="form.taxID"
-          placeholder="E.g DE123456789"
-          id="tax-id"
-          type="text"
-          class="form-control"
-        />
-        @for (error of form.taxID().errors(); track error.kind) {
-          <span class="error">{{ error.message }}</span>
-        }
-      </div>
-    </div>
-  </fieldset>
+  <df-company-info-form [form]="form.company" />
 
   <section class="actions">
     <button type="submit" [disabled]="isSubmitting()">{{ buttonText() }}</button>
