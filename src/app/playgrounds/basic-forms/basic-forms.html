@@ -19,8 +19,9 @@
       class="form-control"
     />
   </div>
-
-  <df-company-info-form [form]="form.company" />
+  @if (!form.company().hidden()) {
+    <df-company-info-form [form]="form.company" />
+  }
 
   <section class="actions">
     <button type="submit" [disabled]="isSubmitting()">{{ buttonText() }}</button>
