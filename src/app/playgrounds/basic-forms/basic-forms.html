@@ -6,9 +6,12 @@
             during the form submittion.
     HINT: the error 'kind' value for the server error is `serverError`
   -->
-  <!-- <div class="errors-banner">
-    <span class="error">__SERVER_ERROR_MESSAGE__</span>
-  </div> -->
+  @let serverError = form().getError('serverError');
+  @if (serverError) {
+  <div class="errors-banner">
+    <span class="error">{{serverError.message}}</span>
+  </div>
+  }
 
   <div class="form-field">
     <label for="name">Full Name</label>

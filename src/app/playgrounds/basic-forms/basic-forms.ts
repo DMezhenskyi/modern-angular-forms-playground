@@ -36,7 +36,7 @@ export default class BasicForms {
           //         in order to bind it to the root FieldTree form state
           // NOTE: `OrderHandler.placeOrderAndFail()` method returns error in a proper 
           // format required by signal forms. 
-          await this.#orderHandler.placeOrderAndFail(form().value())
+          return await this.#orderHandler.placeOrderAndFail(form().value())
 
           // TASK 3*: Handle submition error and map it with failed field
           // NOTE: To simulate this error use `OrderHandler.placeOrderAndFailEmail()` method
