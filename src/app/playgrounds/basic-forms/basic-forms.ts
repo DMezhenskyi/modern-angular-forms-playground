@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { email, form, FormField, FormRoot, max, min, minLength, required, submit } from '@angular/forms/signals';
+import { email, form, FormField, FormRoot, max, maxLength, min, minLength, pattern, required, submit } from '@angular/forms/signals';
 
 import { Order } from '../../core/order/model';
 import { OrderHandler } from '../../core/order/order-handler';
@@ -15,7 +15,10 @@ export default class BasicForms {
   readonly #orderModel = signal<Order>({
     fullName: '',
     email: '',
-    itemCount: null
+    itemCount: null,
+    companyName: '',
+    country: '',
+    taxID: ''
   });
   protected readonly form = form(
     this.#orderModel,
@@ -28,21 +31,18 @@ export default class BasicForms {
       required(path.itemCount, { message: `This field is required` });
       min(path.itemCount, 1, { message: `Amount is too small` });
       max(path.itemCount, 30, { message: `Amount is too large` });
+
+      required(path.companyName);
+      minLength(path.companyName, 5, {
+        message: ({ state }) => `The minimum length is ${state.minLength?.()} characters`
+      });
+      maxLength(path.companyName, 255, {message: `The company name is too long`})
+
+      pattern(path.taxID, /^[A-Z]{2}[A-Z0-9]{8,12}$/, {message: `Wrong TAX Id format`})
     },
     {
       submission: {
-        action: async (form) => {
-          // TASK 3*: Handle submition error and map it with failed field
-          // NOTE: To simulate this error use `OrderHandler.placeOrderAndFailEmail()` method
-          //       this method returns extended ValidationError with a key of the field that is failed (email)
-          //       your goal is to map this error to the email field
-          const {relatedField, ...error} = await this.#orderHandler.placeOrderAndFailEmail(form().value());
-          if (!error) form().reset();
-          return {
-            ...error,
-            fieldTree: relatedField === 'email' ? form.email : undefined
-          }
-        }
+        action: async (form) => await this.#orderHandler.placeOrder(form().value())
       }
     }
   );

@@ -1,33 +1,23 @@
 <h1>Simple Checkout</h1>
 <form [formRoot]="form" class="checkout-form">
-
-  <!-- 
-    TASK 2: display the errors-banner below if the server error happens
-            during the form submittion.
-    HINT: the error 'kind' value for the server error is `serverError`
-  -->
-  @let serverError = form().getError('serverError');
-  @if (serverError) {
-  <div class="errors-banner">
-    <span class="error">{{serverError.message}}</span>
-  </div>
-  }
-
-  <div class="form-field">
-    <label for="name">Full Name</label>
-    <input [formField]="form.fullName" id="name" placeholder="E.g Jane Doe" type="text" class="form-control" />
-    @for (error of form.fullName().errors(); track error.kind) {
-      <span class="error">{{error.message}}</span>
-    }
-  </div>
-
-  <div class="form-field">
-    <label for="email">Email</label>
-    <input [formField]="form.email" id="email" type="email" class="form-control" />
-    @for (error of form.email().errors(); track error.kind) {
-      <span class="error">{{error.message}}</span>
-    }
-  </div>
+  <fieldset>
+    <legend>User Information</legend>
+      <div class="form-field">
+        <label for="name">Full Name</label>
+        <input [formField]="form.fullName" id="name" placeholder="E.g Jane Doe" type="text" class="form-control" />
+        @for (error of form.fullName().errors(); track error.kind) {
+          <span class="error">{{error.message}}</span>
+        }
+      </div>
+    
+      <div class="form-field">
+        <label for="email">Email</label>
+        <input [formField]="form.email" id="email" type="email" class="form-control" />
+        @for (error of form.email().errors(); track error.kind) {
+          <span class="error">{{error.message}}</span>
+        }
+      </div>  
+  </fieldset>
 
   <div class="form-field">
     <label for="itemCount">Item Count</label>
@@ -36,6 +26,49 @@
       <span class="error">{{error.message}}</span>
     }
   </div>
+
+  <fieldset>
+    <legend>Company Information</legend>
+    <div class="form-field">
+      <label for="company-name">Company Name</label>
+      <input
+        [formField]="form.companyName"
+        id="company-name"
+        placeholder="E.g MyCompany GmbH"
+        type="text"
+        class="form-control"
+      />
+      @for (error of form.companyName().errors(); track error.kind) {
+        <span class="error">{{ error.message }}</span>
+      }
+    </div>
+    <div class="form-field-group">
+      <div class="form-field">
+        <label for="country">Country</label>
+        <select [formField]="form.country" id="country" class="form-control">
+          <option value="">Select country</option>
+          <option value="DE">Germany</option>
+          <option value="AT">Austria</option>
+          <option value="CH">Switzerland</option>
+          <option value="CA">Canada</option>
+          <option value="OTHER">Other</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="tax-id">TAX ID</label>
+        <input
+          [formField]="form.taxID"
+          placeholder="E.g DE123456789"
+          id="tax-id"
+          type="text"
+          class="form-control"
+        />
+        @for (error of form.taxID().errors(); track error.kind) {
+          <span class="error">{{ error.message }}</span>
+        }
+      </div>
+    </div>
+  </fieldset>
 
 
   <section class="actions">
