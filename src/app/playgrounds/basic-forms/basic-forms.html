@@ -1,5 +1,5 @@
 <h1>Simple Checkout</h1>
-<form novalidate class="checkout-form">
+<form (submit)="submitForm($event)" novalidate class="checkout-form">
 
   <div class="form-field">
     <label for="name">Full Name</label>
@@ -17,17 +17,9 @@
     }
   </div>
 
-  <!-- TASK 3: Create a native form control for itemsCount
-  and bind it with the model
-  HINT: make sure the type of the input is "number".
-  HINT: use layout of existing fiels `<div class="form-field"></div>` -->
   <div class="form-field">
     <label for="itemCount">Item Count</label>
     <input [formField]="form.itemCount" id="itemCount" type="number" class="form-control" />
-    
-    <!-- TASK 5: display possible validation errors for the itemsCount field 
-    HINT: use layout of existing error messages
-    -->
     @for (error of form.itemCount().errors(); track error.kind) {
       <span class="error">{{error.message}}</span>
     }
@@ -35,6 +27,6 @@
 
 
   <section class="actions">
-    <button type="submit">Submit</button>
+    <button type="submit" [disabled]="isSubmitting()">{{buttonText()}}</button>
   </section>
 </form>
