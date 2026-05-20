@@ -1,5 +1,15 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { form, FormField, FormRoot, max, min, required, apply } from '@angular/forms/signals';
+import {
+  form,
+  FormField,
+  FormRoot,
+  max,
+  min,
+  required,
+  apply,
+  applyWhen,
+  hidden,
+} from '@angular/forms/signals';
 
 import { Order } from '../../core/order/model';
 import { OrderHandler } from '../../core/order/order-handler';
@@ -26,7 +36,7 @@ export default class BasicForms {
       taxID: '',
     },
     itemCount: null,
-    businessPurchase: false,
+    businessPurchase: true,
   });
   protected readonly form = form(
     this.#orderModel,
@@ -36,8 +46,8 @@ export default class BasicForms {
       required(path.itemCount, { message: `This field is required` });
       min(path.itemCount, 1, { message: `Amount is too small` });
       max(path.itemCount, 30, { message: `Amount is too large` });
-
-      apply(path.company, companyInfoFormSchema);
+      
+      applyWhen(path.company, (ctx) => ctx.valueOf(path.businessPurchase), companyInfoFormSchema);
     },
     {
       submission: {
