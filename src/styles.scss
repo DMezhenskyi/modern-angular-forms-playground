@@ -152,6 +152,11 @@ form {
         border-color: var(--color-accent);
         outline: none;
       }
+
+      &:disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
     }
 
     input[type='checkbox'] {
@@ -235,4 +240,8 @@ button {
   border-radius: var(--border-radius);
   background-color: rgba(255, 87, 34, 0.1);
   border: 1px solid var(--color-error);
+}
+
+#businessPurchase {
+  margin: calc(var(--spacing-step) * 2) 0;
 }

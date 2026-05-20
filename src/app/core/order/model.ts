@@ -1,6 +1,7 @@
 export interface Order {
   user: User;
   company: Company;
+  businessPurchase: boolean;
   itemCount: number | null;
 }
 export interface User {
@@ -12,6 +13,3 @@ export interface Company {
   country: 'AT' | 'DE' | 'CH' | 'CA' | 'OTHER' | '';
   taxID: string;
 }
-
-// TASK 1: Restructure the Order interface and extract company-related data
-//         Into a `Company` interface.

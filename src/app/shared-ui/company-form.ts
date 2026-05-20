@@ -51,7 +51,7 @@ export const companyInfoFormSchema = schema<Company>((path) => {
         </select>
       </div>
       <div class="form-field">
-        <label for="tax-id">TAX ID</label>
+        <label for="tax-id">VAT ID</label>
         <input
           [formField]="form().taxID"
           placeholder="E.g DE123456789"
@@ -67,6 +67,5 @@ export const companyInfoFormSchema = schema<Company>((path) => {
   </fieldset>`,
 })
 export class CompanyInfoForm {
-  // TASK 4: Create a required input with a proper FieldTree type and update the component view bindings
   readonly form = input.required<FieldTree<Company>>();
 }

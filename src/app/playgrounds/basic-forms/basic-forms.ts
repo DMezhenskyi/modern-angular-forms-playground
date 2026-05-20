@@ -1,16 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import {
-  form,
-  FormField,
-  FormRoot,
-  max,
-  maxLength,
-  min,
-  minLength,
-  pattern,
-  required,
-  apply,
-} from '@angular/forms/signals';
+import { form, FormField, FormRoot, max, min, required, apply } from '@angular/forms/signals';
 
 import { Order } from '../../core/order/model';
 import { OrderHandler } from '../../core/order/order-handler';
@@ -26,7 +15,6 @@ import { CompanyInfoForm, companyInfoFormSchema } from '../../shared-ui/company-
 export default class BasicForms {
   readonly #orderHandler = inject(OrderHandler);
 
-  // TASK 2: Reshape the model according to the new Order interface
   readonly #orderModel = signal<Order>({
     user: {
       fullName: '',
@@ -38,6 +26,7 @@ export default class BasicForms {
       taxID: '',
     },
     itemCount: null,
+    businessPurchase: false,
   });
   protected readonly form = form(
     this.#orderModel,
@@ -48,8 +37,6 @@ export default class BasicForms {
       min(path.itemCount, 1, { message: `Amount is too small` });
       max(path.itemCount, 30, { message: `Amount is too large` });
 
-      // TASK 6: Extract company-related validations into a dedicated company scheme.
-      // NOTE: schema you can find here src/app/shared-ui/company-form.ts
       apply(path.company, companyInfoFormSchema);
     },
     {

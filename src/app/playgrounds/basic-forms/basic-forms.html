@@ -9,15 +9,17 @@
       <span class="error">{{ error.message }}</span>
     }
   </div>
-  <!--
-    // TASK 3: Extract reusable fieldset into a dedicated component template.
-    // NOTE: path to component src/app/shared-ui/company-form.ts
-  -->
 
-  <!--
-    // TASK 5: Import the company-form component into the current one
-    //         declare it instead of <fieldset ...> below
-  -->
+  <div class="form-field form-field--inline form-field--auto-height form-field--reversed">
+    <label for="businessPurchase">Business Purchase</label>
+    <input
+      [formField]="form.businessPurchase"
+      id="businessPurchase"
+      type="checkbox"
+      class="form-control"
+    />
+  </div>
+
   <df-company-info-form [form]="form.company" />
 
   <section class="actions">
