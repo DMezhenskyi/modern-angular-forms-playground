@@ -1,10 +1,12 @@
 import { Component, input } from '@angular/core';
 import {
+  createMetadataKey,
   disabled,
   FieldTree,
   FormField,
   hidden,
   maxLength,
+  metadata,
   minLength,
   pattern,
   required,
@@ -14,6 +16,8 @@ import {
 import { Company } from '../core/order/model';
 import { VATCorrespondsCountry } from '../core/validators';
 
+export const EU_COUNTRIES = createMetadataKey<Company['country'][]>();
+
 export const companyInfoFormSchema = schema<Company>((path) => {
   required(path.name);
   minLength(path.name, 5, {
@@ -21,12 +25,20 @@ export const companyInfoFormSchema = schema<Company>((path) => {
   });
   maxLength(path.name, 255, { message: `The company name is too long` });
 
+  metadata(path.taxID, EU_COUNTRIES, () => ['AT', 'DE', 'CH'] as const);
+
+  const IS_EU_COUNTRY = metadata(
+    path.taxID,
+    createMetadataKey<boolean>(),
+    (ctx) => ctx.state.metadata(EU_COUNTRIES)?.()!.includes(ctx.valueOf(path.country)) ?? false,
+  );
   pattern(path.taxID, /^[A-Z]{2}[A-Z0-9]{8,12}$/, {
     message: `Wrong TAX Id format`,
-    when: (ctx) => ['AT', 'DE', 'CH'].includes(ctx.valueOf(path.country)),
+    when: (ctx) => ctx.state.metadata(IS_EU_COUNTRY)?.()!,
   });
   hidden(path.taxID, {
-    when: (ctx) => !['AT', 'DE', 'CH'].includes(ctx.valueOf(path.country)),
+    // when: (ctx) => !ctx.state.metadata(EU_COUNTRIES)?.()!.includes(ctx.valueOf(path.country)),
+    when: (ctx) => !ctx.state.metadata(IS_EU_COUNTRY)?.()!,
   });
   VATCorrespondsCountry(path.taxID, { country: (ctx) => ctx.valueOf(path.country) });
 });

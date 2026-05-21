@@ -1,5 +1,6 @@
 import { LogicFn, SchemaPath, validate } from '@angular/forms/signals';
 import { Company } from './order/model';
+import { EU_COUNTRIES } from '../shared-ui/company-form';
 
 export function VATCorrespondsCountry(
   path: SchemaPath<string>,
@@ -9,7 +10,8 @@ export function VATCorrespondsCountry(
   },
 ) {
   validate(path, (ctx) => {
-    const foundEUCountryISO = ['AT', 'DE', 'CH'].find((c) => config.country(ctx) === c);
+    const countries = ctx.state.metadata(EU_COUNTRIES)?.() ?? [];
+    const foundEUCountryISO = countries.find((c) => config.country(ctx) === c);
 
     if (foundEUCountryISO) {
       if (ctx.value() && !ctx.value().startsWith(foundEUCountryISO)) {
@@ -23,6 +25,8 @@ export function VATCorrespondsCountry(
   });
 }
 
+// TASK 1: Create a global DISALLOWED_VALUES metadata token for disallowedValues
+
 export function disallowedValues(
   path: SchemaPath<string>,
   disallowedValues: string[],
@@ -31,10 +35,14 @@ export function disallowedValues(
     message?: string;
   },
 ) {
+  // TASK 2: Set metadata for a token created in the previous step
+  //         disallowedValues use as a value for the metadata token
   validate(path, (ctx) => {
     const APPLY_VALIDATION = config?.when ? config.when(ctx) : true;
     if (!APPLY_VALIDATION) return;
 
+    // TASK 3: Reference the DISALLOWED_VALUES token in the field metadata
+    //         instead of directly access disallowedValues variable
     const disallowedValue = disallowedValues.find((v) => v === ctx.value());
 
     if (disallowedValue) {

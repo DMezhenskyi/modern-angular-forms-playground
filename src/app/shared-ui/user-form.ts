@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { email, FieldTree, FormField, minLength, required, schema } from '@angular/forms/signals';
 import { User } from '../core/order/model';
 import { disallowedValues } from '../core/validators';
@@ -21,7 +21,13 @@ export const userFormInfoSchema = schema<User>((path) => {
     <fieldset>
       <legend>User Information</legend>
       <div class="form-field">
-        <label for="name">Full Name</label>
+        @let notAllowed = disallowedUserNames();
+        <label for="name"
+          >Full Name
+          @if (notAllowed.length > 0) {
+            <span class="hint">User names like: {{ notAllowed.join(', ') }} are NOT allowed</span>
+          }
+        </label>
         <input
           [formField]="form().fullName"
           id="name"
@@ -46,4 +52,9 @@ export const userFormInfoSchema = schema<User>((path) => {
 })
 export class UserInfoForm {
   form = input.required<FieldTree<User>>();
+
+  // TASK 4: Derive user names that are not allowed using form control state and DISALLOWED_VALUES token
+  protected readonly disallowedUserNames = computed(() => {
+    return [];
+  });
 }
