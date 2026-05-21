@@ -1,0 +1,18 @@
+<form [formRoot]="form" class="checkout-form">
+  <div class="form-field">
+    <label for="__DYNAMIC_ID__">__DYNAMIC_LABEL__</label>
+    <input
+      id="__DYNAMIC_ID__"
+      placeholder="__DYNAMIC_PLACEHOLDER__"
+      type="text"
+      class="form-control"
+    />
+    <!-- @for (error of form.[field].errors(); track error.kind) {
+      <span class="error">{{ error.message }}</span>
+    } -->
+  </div>
+
+  <section class="actions">
+    <button type="submit">{{ buttonText() }}</button>
+  </section>
+</form>
