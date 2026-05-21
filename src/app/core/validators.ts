@@ -1,4 +1,4 @@
-import { LogicFn, SchemaPath, validate } from '@angular/forms/signals';
+import { createMetadataKey, LogicFn, metadata, SchemaPath, validate } from '@angular/forms/signals';
 import { Company } from './order/model';
 import { EU_COUNTRIES } from '../shared-ui/company-form';
 
@@ -26,6 +26,7 @@ export function VATCorrespondsCountry(
 }
 
 // TASK 1: Create a global DISALLOWED_VALUES metadata token for disallowedValues
+export const DISALLOWED_VALUES = createMetadataKey<string[]>();
 
 export function disallowedValues(
   path: SchemaPath<string>,
@@ -37,13 +38,20 @@ export function disallowedValues(
 ) {
   // TASK 2: Set metadata for a token created in the previous step
   //         disallowedValues use as a value for the metadata token
+  metadata(path, DISALLOWED_VALUES, (ctx) => {
+    // TIP: this logic could be also memoized and extracted as internal metadata.
+    const APPLY_VALIDATION = config?.when ? config.when(ctx) : true;
+    return APPLY_VALIDATION ? disallowedValues : [];
+  });
+
   validate(path, (ctx) => {
     const APPLY_VALIDATION = config?.when ? config.when(ctx) : true;
     if (!APPLY_VALIDATION) return;
 
     // TASK 3: Reference the DISALLOWED_VALUES token in the field metadata
     //         instead of directly access disallowedValues variable
-    const disallowedValue = disallowedValues.find((v) => v === ctx.value());
+    const values = ctx.state.metadata(DISALLOWED_VALUES)!() ?? [];
+    const disallowedValue = values.find((v) => v === ctx.value());
 
     if (disallowedValue) {
       return {

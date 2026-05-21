@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { email, FieldTree, FormField, minLength, required, schema } from '@angular/forms/signals';
 import { User } from '../core/order/model';
-import { disallowedValues } from '../core/validators';
+import { DISALLOWED_VALUES, disallowedValues } from '../core/validators';
 
 export const userFormInfoSchema = schema<User>((path) => {
   disallowedValues(path.fullName, ['admin', 'test'], {
@@ -55,6 +55,6 @@ export class UserInfoForm {
 
   // TASK 4: Derive user names that are not allowed using form control state and DISALLOWED_VALUES token
   protected readonly disallowedUserNames = computed(() => {
-    return [];
+    return this.form().fullName().metadata(DISALLOWED_VALUES)?.() ?? [];
   });
 }
