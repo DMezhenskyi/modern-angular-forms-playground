@@ -20,4 +20,10 @@ export interface TextFieldConfig extends InputFieldConfig {
   maxLength?: number;
 }
 
+// TASK 1: Create interfaces for NumberFieldConfig, SelectFieldConfig
+//         define corresponding fields there and types e.g kind: 'number'; kind: 'select'; and other attributes like
+//         min, max, options, etc
+
 export type FieldConfig = TextFieldConfig; // <-- TIP: should be union type of all supported control configs
+
+// TASK 2: Add created interfaces to the union type like ... NumberFieldConfig | SelectFieldConfig

@@ -1,8 +1,8 @@
 import { Component, computed, signal } from '@angular/core';
-import { form, FormField, FormRoot } from '@angular/forms/signals';
+import { Field, form, FormField, FormRoot } from '@angular/forms/signals';
 import { FormConfig } from './model';
 import { FORM_CONFIG } from './form-config';
-import { submitForm } from './utils';
+import { buildModel, submitForm } from './utils';
 
 @Component({
   selector: 'df-dynamic-forms',
@@ -15,7 +15,7 @@ export default class DynamicForms {
 
   protected readonly controlConfigs = computed(() => this.#config().controls);
 
-  readonly #formModel = signal({});
+  readonly #formModel = signal(buildModel(this.controlConfigs()));
 
   protected readonly form = form(this.#formModel, (path) => {}, {
     submission: { action: async (form) => submitForm(form) },
@@ -24,6 +24,12 @@ export default class DynamicForms {
   protected readonly buttonText = computed(() =>
     this.form().submitting() ? 'Processing...' : 'Submit',
   );
+
+  protected asTextField(name: string) {
+    return this.form[name] as unknown as Field<string>;
+  }
+
+  // TASK 4: Add 2 additional field resolver methods for number and select fields
 
   constructor() {}
 }

@@ -5,6 +5,9 @@ export type FormModel = Record<string, string | boolean | number | null>;
 
 export function buildModel(fieldConfigs: FieldConfig[]): FormModel {
   const model: FormModel = {};
+  for (const config of fieldConfigs) {
+    model[config.name] = config.value ?? '';
+  }
 
   return model;
 }

@@ -1,16 +1,21 @@
 <form [formRoot]="form" class="checkout-form">
-  <div class="form-field">
-    <label for="__DYNAMIC_ID__">__DYNAMIC_LABEL__</label>
-    <input
-      id="__DYNAMIC_ID__"
-      placeholder="__DYNAMIC_PLACEHOLDER__"
-      type="text"
-      class="form-control"
-    />
-    <!-- @for (error of form.[field].errors(); track error.kind) {
-      <span class="error">{{ error.message }}</span>
-    } -->
-  </div>
+  @for (config of controlConfigs(); track config.name) {
+    <div class="form-field">
+      <label [for]="config.name">{{ config.label }}</label>
+      @switch (config.kind) {
+        @case ('text') {
+          <input
+            [formField]="asTextField(config.name)"
+            [id]="config.name"
+            [placeholder]="config.placeholder"
+            [type]="config.type || 'text'"
+            class="form-control"
+          />
+        }
+        <!-- // TASK 5: extend the list of supported items in the template -->
+      }
+    </div>
+  }
 
   <section class="actions">
     <button type="submit">{{ buttonText() }}</button>
